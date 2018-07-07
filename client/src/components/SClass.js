@@ -20,11 +20,11 @@ const classColumns = [{
   title: 'Class ID',
   dataIndex: 'class_id',
   key: 'class_id',
-},  {
+},  /*{
   title: 'Subjects',
   dataIndex: 'subjects',
   key: 'subjects',
-}];
+}*/];
 
 
 export default class SClass extends Component {
@@ -113,10 +113,6 @@ class AddClass extends Component {
 		this.setState({section: value});
 	}
 
-	/*changeSubjectCount = (e) => {
-		this.setState({subjects_count: e.target.value});
-	}*/
-
 	changeSubject = (value) => {
 		this.setState({tempSubject: value});
 	}
@@ -143,7 +139,19 @@ class AddClass extends Component {
 	}
 
 	submit = () => {
-		var id = this.state.branch + this.state.year + this.state.section;
+		var branchAbbr;
+		switch(this.state.branch) {
+			case 'CSE': {branchAbbr = 'C'; break;}
+			case 'ECE': {branchAbbr = 'E'; break;}
+			case 'EEE': {branchAbbr = 'D'; break;}
+			case 'IT': {branchAbbr = 'H'; break;}
+			case 'Mechanical': {branchAbbr = 'F'; break;}
+			case 'Biotechnology': {branchAbbr = 'B'; break;}
+			case 'Chemical': {branchAbbr = 'K'; break;}
+			case 'Production': {branchAbbr = 'P'; break;}
+			case 'Civil': {branchAbbr = 'A'; break;}
+		}
+		var id = branchAbbr + this.state.year + this.state.section;
 		axios.post('http://localhost:4000/api/results/addclass', {
 			class_id: id,
 			branch: this.state.branch,
@@ -169,10 +177,6 @@ class AddClass extends Component {
 		</div>
 
 		const addedSubjects = this.state.subjects.map(subject => <h6>Subject: {subject.subject_id} Faculty: {subject.faculty_id}</h6>)
-		/*var addSubjectArr = [];
-		for (var i = 0; i < this.state.subjects_count; i++) {
-		    addSubjectArr.push(<div>{addSubject}</div>);
-		}*/
 
 		const subjectColumns = [{
 			title: 'Subject',
@@ -218,9 +222,6 @@ class AddClass extends Component {
 				  <Option value="2">2</Option>
 				  <Option value="3">3</Option>
 				</Select>
-
-{/*				<Input placeholder = "No. of subjects" style = {{width: 200}} onChange = {this.changeSubjectCount}/>
-*/}
 				<br/>
 				{addSubject}
 				{this.state.subjects_count>0 && <Table dataSource = {this.state.subjects} columns={subjectColumns}/>}

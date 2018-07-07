@@ -11,6 +11,7 @@ import {
 import Faculty from './Faculty';
 import SClass from './SClass';
 import Subject from './Subject';
+import Marks from './Marks';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -46,8 +47,10 @@ class App extends Component {
               </Link>
             </Menu.Item>
             <Menu.Item key="4">
-              <Icon type="user" />
-              <span className="nav-text">nav 4</span>
+              <Link to = "/marks">
+                <Icon type="user" />
+                <span className="nav-text">Marks</span>
+              </Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -59,6 +62,7 @@ class App extends Component {
                 <Route path="/faculty" component={Faculty} />
                 <Route path="/classes" component={SClass} />
                 <Route path="/subjects" component={Subject} />
+                <Route path="/marks" component={Marks} />
               </Switch>
             </div>
           </Content>
