@@ -4,6 +4,7 @@ const StudentModel = require('../models/student.js');
 const SubjectModel = require('../models/subject.js');
 const FacultyModel = require('../models/faculty.js');
 const SClassModel = require('../models/sclass.js');
+const MarksModel = require('../models/marks.js');
 
 exports.getFaculties = (req, res) => {
 	FacultyModel.find()
@@ -69,6 +70,28 @@ exports.addSubject = (req, res) => {
             res.send(result);
         }
 	})
+}
+
+exports.addMarks = (req, res) => {
+    MarksModel.create(req.body, (err, result) => {
+        if (err) {
+            res.send(err);
+        }
+        else {
+            res.send(result);
+        }
+    })
+}
+
+exports.findMarks = (req, res) => {
+    MarksModel.find({class_id: req.body.class_id, subject_id: req.body.subject_id}, (err, result) => {
+        if (err) {
+            res.send(err);
+        }
+        else {
+            res.send(result);
+        }
+    })
 }
 
 

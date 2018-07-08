@@ -9,4 +9,7 @@ module.exports = (app) => {
 
     app.get('/api/results/getclasses', results.getClasses);
     app.post('/api/results/addclass', results.addClass);
+
+    app.post('/api/results/addmarks', results.addMarks);
+    app.post('/api/results/findmarks', results.findMarks);
 }
