@@ -30,8 +30,6 @@ const classColumns = [{
 export default class SClass extends Component {
 	state = {
 		classList: [],
-		showAllClass: false,
-		showAddClass: false,
 	}
 
 	getClasses() {
@@ -41,31 +39,20 @@ export default class SClass extends Component {
 		.then(classList => this.setState({classList}))
 	}
 
-	toggleAllClasses = () => {
+	componentDidMount() {
 		this.getClasses();
-		if(this.state.showAddClass) this.setState({showAddClass: false});
-		this.setState({showAllClass: !this.state.showAllClass});
 	}
 
-	toggleAddClasses = () => {
-		if(this.state.showAllClass) this.setState({showAllClass: false});
-		this.setState({showAddClass: !this.state.showAddClass});
+	componentWillReceiveProps(nextProps){
+	  this.setState({op: nextProps.match.params.op}, this.getClasses());
 	}
 
 	render()
 	{
 		return (
 			<div>
-				<Row>
-					<Col md = {3}>
-					<Button type = "primary" onClick = {this.toggleAllClasses}>{!this.state.showAllClass ? <span>See All Classes</span> : <span>Hide</span>}</Button>
-					</Col>
-					<Col md = {3}>
-					<Button type = "primary" onClick = {this.toggleAddClasses}>{!this.state.showAddClass ? <span>Add Class</span> : <span>Hide</span>}</Button>
-					</Col>
-				</Row>
-				{this.state.showAllClass && <Table dataSource = {this.state.classList} columns={classColumns}/>}
-				{this.state.showAddClass && <AddClass/>}
+				{this.state.op === "see" && <Table dataSource = {this.state.classList} columns={classColumns}/>}
+				{this.state.op === "add"  && <AddClass/>}
 			</div>
 		);
 	}

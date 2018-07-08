@@ -14,8 +14,27 @@ import Subject from './Subject';
 import Marks from './Marks';
 
 const { Header, Content, Footer, Sider } = Layout;
+const SubMenu = Menu.SubMenu;
 
 class App extends Component {
+
+  rootSubmenuKeys = ['sub1', 'sub2', 'sub3', 'sub4'];
+
+  state = {
+    openKeys: [],
+  };
+
+  onOpenChange = (openKeys) => {
+    const latestOpenKey = openKeys.find(key => this.state.openKeys.indexOf(key) === -1);
+    if (this.rootSubmenuKeys.indexOf(latestOpenKey) === -1) {
+      this.setState({ openKeys });
+    } else {
+      this.setState({
+        openKeys: latestOpenKey ? [latestOpenKey] : [],
+      });
+    }
+  }
+
   render() {
     let that = this;
     return (
@@ -27,31 +46,28 @@ class App extends Component {
           onCollapse={(collapsed, type) => { console.log(collapsed, type); }}
         >
           <div className="logo" />
-          <Menu theme="dark" mode="inline">
-            <Menu.Item key="1">
-              <Link to = "/faculty">
-                <Icon type="user" />
-                <span className="nav-text">Faculty</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Link to = "/classes">
-                <Icon type="video-camera" />
-                <span className="nav-text">Classes</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="3">
-              <Link to = "/subjects">
-                <Icon type="upload" />
-                <span className="nav-text">Subjects</span>
-              </Link>
-            </Menu.Item>
-            <Menu.Item key="4">
-              <Link to = "/marks">
-                <Icon type="user" />
-                <span className="nav-text">Marks</span>
-              </Link>
-            </Menu.Item>
+          <Menu
+            theme = "dark"
+            mode="inline"
+            openKeys={this.state.openKeys}
+            onOpenChange={this.onOpenChange}
+          >
+            <SubMenu key="sub1" title={<span><span>Faculty</span></span>}>
+             <Menu.Item key="1"> <Link to = "/faculty/see">See Faculty</Link></Menu.Item>
+              <Menu.Item key="2"><Link to = "/faculty/add">Add Faculty</Link></Menu.Item>
+            </SubMenu>
+            <SubMenu key="sub2" title={<span><span>Subjects</span></span>}>
+              <Menu.Item key="5"><Link to = "/subjects/see">See Subjects</Link></Menu.Item>
+              <Menu.Item key="6"><Link to = "/subjects/add">Add Subjects</Link></Menu.Item>
+            </SubMenu>
+            <SubMenu key="sub3" title={<span><span>Classes</span></span>}>
+              <Menu.Item key="5"><Link to = "/classes/see">See Classes</Link></Menu.Item>
+              <Menu.Item key="6"><Link to = "/classes/add">Add Classes</Link></Menu.Item>
+            </SubMenu>
+            <SubMenu key="sub4" title={<span><span>Marks</span></span>}>
+              <Menu.Item key="9"><Link to = "/marks/see">See Marks</Link></Menu.Item>
+              <Menu.Item key="10"><Link to = "/marks/add">Add Marks</Link></Menu.Item>
+            </SubMenu>
           </Menu>
         </Sider>
         <Layout>
@@ -59,10 +75,11 @@ class App extends Component {
           <Content style={{ margin: '24px 16px 0' }}>
             <div style={{ padding: 24, background: '#fff', minHeight: 360 }}>
               <Switch>
-                <Route path="/faculty" component={Faculty} />
-                <Route path="/classes" component={SClass} />
-                <Route path="/subjects" component={Subject} />
-                <Route path="/marks" component={Marks} />
+                <Route exact path = "/" render = {() => <h1 style = {{textAlign: 'center'}}>results-app</h1>}/>
+                <Route path="/faculty/:op" component = {Faculty}/>
+                <Route path="/classes/:op" component={SClass} />
+                <Route path="/subjects/:op" component={Subject} />
+                <Route path="/marks/:op" component={Marks} />
               </Switch>
             </div>
           </Content>

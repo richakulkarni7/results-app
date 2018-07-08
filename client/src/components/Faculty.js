@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent, Component } from 'react';
 import { Button, Table, Row, Col, Input, Select } from 'antd';
 import axios from 'axios';
 
@@ -19,12 +19,13 @@ const columns = [{
 }];
 
 
-export default class Faculty extends Component {
+export default class Faculty extends PureComponent {
 	
-	state = {
+	constructor(props) {
+		super(props);
+		this.state = {
 		facultyList: [],
-		showAllFaculty: false,
-		showAddFaculty: false,
+		}
 	}
 
 	getFaculty() {
@@ -34,31 +35,20 @@ export default class Faculty extends Component {
 		.then(facultyList => this.setState({facultyList}))
 	}
 
-	toggleAllFaculty = () => {
+	componentDidMount() {
 		this.getFaculty();
-		if(this.state.showAddFaculty) this.setState({showAddFaculty: false});
-		this.setState({showAllFaculty: !this.state.showAllFaculty});
 	}
 
-	toggleAddFaculty = () => {
-		if(this.state.showAllFaculty) this.setState({showAllFaculty: false});
-		this.setState({showAddFaculty: !this.state.showAddFaculty});
+	componentWillReceiveProps(nextProps){
+	  this.setState({op: nextProps.match.params.op}, this.getFaculty());
 	}
 
 	render()
 	{
 		return (
 			<div>
-				<Row>
-					<Col md = {3}>
-					<Button type = "primary" onClick = {this.toggleAllFaculty}>{!this.state.showAllFaculty ? <span>See All Faculty</span> : <span>Hide</span>}</Button>
-					</Col>
-					<Col md = {3}>
-					<Button type = "primary" onClick = {this.toggleAddFaculty}>{!this.state.showAddFaculty ? <span>Add Faculty</span> : <span>Hide</span>}</Button>
-					</Col>
-				</Row>
-				{this.state.showAllFaculty && <Table dataSource = {this.state.facultyList} columns={columns}/>}
-				{this.state.showAddFaculty && <AddFaculty/>}
+				{this.state.op === "see" && <Table dataSource = {this.state.facultyList} columns={columns}/>}
+				{this.state.op === "add" && <AddFaculty/>}
 			</div>
 		);
 	}

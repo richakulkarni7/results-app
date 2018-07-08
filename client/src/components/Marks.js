@@ -21,30 +21,15 @@ export default class Marks extends Component {
 	componentDidMount() {
 		this.getClasses();
 	}
-	toggleAllMarks = () => {
-		// this.getMarks();
-		if(this.state.showAddMarks) this.setState({showAddMarks: false});
-		this.setState({showAllMarks: !this.state.showAllMarks});
-	}
-
-	toggleAddMarks = () => {
-		if(this.state.showAllMarks) this.setState({showAllMarks: false});
-		this.setState({showAddMarks: !this.state.showAddMarks});
+	componentWillReceiveProps(nextProps){
+	  this.setState({op: nextProps.match.params.op});
 	}
 
 	render() {
 		return(
 			<div>
-			<Row>
-				<Col md = {3}>
-				<Button type = "primary" onClick = {this.toggleAllMarks}>{!this.state.showAllMarks ? <span>See Marks</span> : <span>Hide</span>}</Button>
-				</Col>
-				<Col md = {3}>
-				<Button type = "primary" onClick = {this.toggleAddMarks}>{!this.state.showAddMarks ? <span>Add Marks</span> : <span>Hide</span>}</Button>
-				</Col>
-			</Row>
-			{this.state.showAllMarks && <ShowMarks classList = {this.state.classList}/>}
-			{this.state.showAddMarks && <AddMarks classList = {this.state.classList}/> }
+				{this.state.op === "see" && <ShowMarks classList = {this.state.classList}/>}
+				{this.state.op === "add" && <AddMarks classList = {this.state.classList}/> }
 			</div>
 		);
 	}

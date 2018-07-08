@@ -19,8 +19,6 @@ export default class Subject extends Component {
 	
 	state = {
 		subjectList: [],
-		showAllSubject: false,
-		showAddSubject: false,
 	}
 
 	getSubject() {
@@ -30,31 +28,20 @@ export default class Subject extends Component {
 		.then(subjectList => this.setState({subjectList}))
 	}
 
-	toggleAllSubject = () => {
+	componentDidMount() {
 		this.getSubject();
-		if(this.state.showAddSubject) this.setState({showAddSubject: false});
-		this.setState({showAllSubject: !this.state.showAllSubject});
 	}
 
-	toggleAddSubject = () => {
-		if(this.state.showAllSubject) this.setState({showAllSubject: false});
-		this.setState({showAddSubject: !this.state.showAddSubject});
+	componentWillReceiveProps(nextProps){
+	  this.setState({op: nextProps.match.params.op}, this.getSubject());
 	}
 
 	render()
 	{
 		return (
 			<div>
-				<Row>
-					<Col md = {3}>
-					<Button type = "primary" onClick = {this.toggleAllSubject}>{!this.state.showAllSubject ? <span>See All Subjects</span> : <span>Hide</span>}</Button>
-					</Col>
-					<Col md = {3}>
-					<Button type = "primary" onClick = {this.toggleAddSubject}>{!this.state.showAddSubject ? <span>Add Subject</span> : <span>Hide</span>}</Button>
-					</Col>
-				</Row>
-				{this.state.showAllSubject && <Table dataSource = {this.state.subjectList} columns={columns}/>}
-				{this.state.showAddSubject && <AddSubject/>}
+				{this.state.op === "see" && <Table dataSource = {this.state.subjectList} columns={columns}/>}
+				{this.state.op === "add" && <AddSubject/>}
 			</div>
 		);
 	}
