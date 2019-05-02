@@ -231,8 +231,8 @@ class Insights extends Component {
         <ul>
             {this.state && this.state.subjects && this.state.failed_no_subjectwise && this.state.subjects.map((value, index) => 
               <div>
-                <li>{index} {value}</li>
-                <VictoryPie data  = {[{x: "Failed", y: this.state.failed_no_subjectwise[index]}, {x: "Passed", y: this.state.no_students - this.state.failed_no_subjectwise[index]}]}/>
+                <li>{value}</li>
+                <div style = {{height: 300}}><VictoryPie colorScale = {["navy", "cyan"]} data  = {[{x: "Failed", y: this.state.failed_no_subjectwise[index]}, {x: "Passed", y: this.state.no_students - this.state.failed_no_subjectwise[index]}]}/></div>
               </div>
             )}
         </ul>
