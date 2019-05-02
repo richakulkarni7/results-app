@@ -220,18 +220,30 @@ class Insights extends Component {
         <h1>{this.state && this.state.analysisList[0].class_id}</h1>
         <Button color="info" style={{color: "white", zIndex: 0}} onClick={this.seeSubmit.bind(this)}>See</Button>
           
-        <div style = {{height: 300}}>{this.state && this.state.failed_students && <VictoryPie data  = {[{x: "Failed", y: this.state.failed_students.length}, {x: "Passed", y: this.state.passed_students}]}/>}</div>
-          <div style = {{height: 300}}>{this.state && this.state.failed_no_subjectwise && 
-            <VictoryChart>
-              <VictoryBar data = {this.state.failed_no_subjectwise}/>
-            </VictoryChart>
+        
+          {this.state && this.state.failed_students && 
+            <div>
+              <h4 style = {{alignment: 'center'}}>Passed: {this.state.passed_students}, Failed: {this.state.failed_students.length} </h4>
+              <div style = {{height: 300}}><VictoryPie data  = {[{x: "Failed", y: this.state.failed_students.length}, {x: "Passed", y: this.state.passed_students}]}/></div>
+            </div>
+          }          
+
+          {this.state && this.state.failed_no_subjectwise && 
+            <div>
+              <h4> Failed, subject-wise </h4>
+              {
+                this.state.failed_no_subjectwise.map((value, index) => <div> {this.state.subjects[index]}: {value} </div> )
+              }
+              <div style = {{height: 300}}><VictoryChart>
+                <VictoryBar data = {this.state.failed_no_subjectwise}/>
+              </VictoryChart></div>
+            </div>
           }
-        </div>
 
         <ul>
             {this.state && this.state.subjects && this.state.failed_no_subjectwise && this.state.subjects.map((value, index) => 
               <div>
-                <li>{value}</li>
+                <li>{value}, <h4>Failed: </h4> {this.state.failed_no_subjectwise[index]}</li>
                 <div style = {{height: 300}}><VictoryPie colorScale = {["navy", "cyan"]} data  = {[{x: "Failed", y: this.state.failed_no_subjectwise[index]}, {x: "Passed", y: this.state.no_students - this.state.failed_no_subjectwise[index]}]}/></div>
               </div>
             )}
